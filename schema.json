@@ -1,0 +1,106 @@
+[
+    {
+  "id": "pbc_383669827",
+  "listRule": "",
+  "viewRule": "",
+  "createRule": null,
+  "updateRule": null,
+  "deleteRule": null,
+  "name": "berita_mapala",
+  "type": "base",
+  "fields": [
+    {
+      "autogeneratePattern": "[a-z0-9]{15}",
+      "hidden": false,
+      "id": "text3208210256",
+      "max": 15,
+      "min": 15,
+      "name": "id",
+      "pattern": "^[a-z0-9]+$",
+      "presentable": false,
+      "primaryKey": true,
+      "required": true,
+      "system": true,
+      "type": "text"
+    },
+    {
+      "autogeneratePattern": "",
+      "hidden": false,
+      "id": "text282266467",
+      "max": 0,
+      "min": 0,
+      "name": "judul",
+      "pattern": "",
+      "presentable": false,
+      "primaryKey": false,
+      "required": false,
+      "system": false,
+      "type": "text"
+    },
+    {
+      "hidden": false,
+      "id": "select3357413904",
+      "maxSelect": 1,
+      "name": "kategori",
+      "presentable": false,
+      "required": false,
+      "system": false,
+      "type": "select",
+      "values": [
+        "isu konservasi",
+        "bencana alam",
+        "ekspedisi"
+      ]
+    },
+    {
+      "convertURLs": false,
+      "hidden": false,
+      "id": "editor4061277607",
+      "maxSize": 0,
+      "name": "konten",
+      "presentable": false,
+      "required": false,
+      "system": false,
+      "type": "editor"
+    },
+    {
+      "hidden": false,
+      "id": "file1644820023",
+      "maxSelect": 1,
+      "maxSize": 0,
+      "mimeTypes": [],
+      "name": "foto_utama",
+      "presentable": false,
+      "protected": false,
+      "required": false,
+      "system": false,
+      "thumbs": [],
+      "type": "file"
+    },
+    {
+      "hidden": false,
+      "id": "autodate2990389176",
+      "name": "created",
+      "onCreate": true,
+      "onUpdate": false,
+      "presentable": false,
+      "system": false,
+      "type": "autodate"
+    },
+    {
+      "hidden": false,
+      "id": "autodate3332085495",
+      "name": "updated",
+      "onCreate": true,
+      "onUpdate": true,
+      "presentable": false,
+      "system": false,
+      "type": "autodate"
+    }
+  ],
+  "indexes": [],
+  "created": "2026-02-06 01:32:00.234Z",
+  "updated": "2026-02-06 01:39:07.199Z",
+  "system": false
+}
+]
