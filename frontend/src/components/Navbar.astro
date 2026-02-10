@@ -1,0 +1,30 @@
+---
+// src/components/Navbar.astro
+// Di sini area script (kosong dulu karena navbar masih statis)
+---
+
+<nav class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
+  <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
+    
+    <a href="/" class="flex items-center gap-2 group">
+      <div class="w-8 h-8 bg-green-700 text-white rounded flex items-center justify-center font-bold text-lg shadow-md group-hover:bg-green-800 transition-colors">M</div>
+      <span class="font-bold tracking-tight text-gray-900 text-lg">MAPALA<span class="text-green-700">NEWS</span></span>
+    </a>
+
+    <div class="hidden md:flex items-center space-x-1">
+      <a href="/" class="px-4 py-2 text-xs font-bold text-white bg-green-700 rounded-full hover:bg-green-800 transition-colors tracking-widest uppercase">
+        Home
+      </a>
+
+      <div class="h-4 w-[1px] bg-gray-300 mx-2"></div>
+
+      <div class="flex space-x-6 text-xs font-bold tracking-widest text-gray-500 uppercase">
+        <a href="#" class="hover:text-green-700 hover:underline decoration-2 underline-offset-4 transition-all">Konservasi</a>
+        <a href="#" class="hover:text-red-700 hover:underline decoration-2 underline-offset-4 transition-all">Bencana</a>
+        <a href="#" class="hover:text-blue-700 hover:underline decoration-2 underline-offset-4 transition-all">Ekspedisi</a>
+      </div>
+    </div>
+
+    <button class="md:hidden text-gray-700 text-2xl">☰</button>
+  </div>
+</nav>

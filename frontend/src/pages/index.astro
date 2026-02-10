@@ -1,14 +1,18 @@
 ---
 import { pb } from '../lib/pocketbase';
-
-// LOGIKA TETAP SAMA (SIMPEL)
+import Navbar from '../components/Navbar.astro';
+import '../styles/global.css';
+// 1. AMBIL DATA
+// Kita ambil semua berita, urutkan dari yang terbaru
 const posts = await pb.collection('berita_mapala').getFullList({
     sort: '-created',
 });
 
-const headline = posts[0]; 
-const otherPosts = posts.slice(1);
+// 2. PISAHKAN BERITA
+const headline = posts[0]; // Berita paling baru (indeks 0)
+const otherPosts = posts.slice(1); // Berita sisanya
 
+// 3. HELPER GAMBAR
 function getImageUrl(record, filename) {
     if (!filename) return null;
     return `${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${filename}`;
@@ -22,23 +26,36 @@ function getImageUrl(record, filename) {
 		<title>MAPALA - Konservasi & Bencana</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
 	</head>
 	<body class="bg-gray-50 text-gray-800 font-sans antialiased">
 		
-		<nav class="sticky top-0 z-40 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all">
+		<nav class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
 			<div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
-				<a href="/" class="flex items-center gap-2 group">
-                    <div class="w-8 h-8 bg-green-700 text-white rounded flex items-center justify-center font-bold text-lg">M</div>
-					<span class="font-bold tracking-tight text-gray-900 group-hover:text-green-700 transition-colors">MAPALA<span class="text-gray-400 font-normal">NEWS</span></span>
+				
+                <a href="/" class="flex items-center gap-2 group">
+                    <div class="w-8 h-8 bg-green-700 text-white rounded flex items-center justify-center font-bold text-lg shadow-md group-hover:bg-green-800 transition-colors">M</div>
+					<span class="font-bold tracking-tight text-gray-900 text-lg">MAPALA<span class="text-green-700">NEWS</span></span>
 				</a>
-				<div class="hidden md:flex space-x-8 text-xs font-bold tracking-widest text-gray-500 uppercase">
-					<a href="#" class="hover:text-green-700 transition-colors py-2 border-b-2 border-transparent hover:border-green-700">Konservasi</a>
-					<a href="#" class="hover:text-red-700 transition-colors py-2 border-b-2 border-transparent hover:border-red-700">Bencana</a>
-					<a href="#" class="hover:text-blue-700 transition-colors py-2 border-b-2 border-transparent hover:border-blue-700">Ekspedisi</a>
+
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="/" class="px-4 py-2 text-xs font-bold text-white bg-green-700 rounded-full hover:bg-green-800 transition-colors tracking-widest uppercase">
+                        Home
+                    </a>
+
+                    <div class="h-4 w-[1px] bg-gray-300 mx-2"></div>
+
+                    <div class="flex space-x-6 text-xs font-bold tracking-widest text-gray-500 uppercase">
+                        <a href="#" class="hover:text-green-700 hover:underline decoration-2 underline-offset-4 transition-all">Konservasi</a>
+                        <a href="#" class="hover:text-red-700 hover:underline decoration-2 underline-offset-4 transition-all">Bencana</a>
+                        <a href="#" class="hover:text-blue-700 hover:underline decoration-2 underline-offset-4 transition-all">Ekspedisi</a>
+                    </div>
 				</div>
+
+                <button class="md:hidden text-gray-700 text-2xl">☰</button>
 			</div>
 		</nav>
+
 
 		<main class="max-w-6xl mx-auto px-6 py-8">
 			
@@ -61,10 +78,10 @@ function getImageUrl(record, filename) {
                             <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
 
                             <div class="absolute bottom-0 left-0 p-6 md:p-10 w-full md:w-2/3">
-                                <span class="inline-block px-3 py-1 mb-4 text-[10px] font-bold tracking-widest text-white uppercase bg-green-700 rounded-sm shadow-md">
+                                <span class="inline-block px-3 py-1 mb-4 text-[10px] font-bold tracking-widest text-white uppercase bg-green-700 rounded-md shadow-md">
                                     {headline.kategori}
                                 </span>
-                                <h1 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 drop-shadow-md group-hover:underline decoration-green-500 decoration-4 underline-offset-4">
+                                <h1 class="font-serif text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 drop-shadow-md">
                                     {headline.judul}
                                 </h1>
                                 <p class="text-gray-300 text-sm md:text-base line-clamp-2 max-w-xl font-light">
@@ -78,8 +95,8 @@ function getImageUrl(record, filename) {
 
 			<div class="border-t border-dashed border-gray-300 pt-10">
 				<div class="flex items-center justify-between mb-8">
-                    <h3 class="text-xl font-bold text-gray-900 border-l-4 border-green-700 pl-3">Terbaru Hari Ini</h3>
-                    <a href="#" class="text-xs font-bold text-gray-500 hover:text-green-700 flex items-center gap-1">LIHAT SEMUA →</a>
+                    <h3 class="text-xl font-bold text-gray-900 border-l-4 border-green-700 pl-3">Warta Terkini</h3>
+                    <a href="#" class="text-xs font-bold text-gray-500 hover:text-green-700 flex items-center gap-1 transition-colors">LIHAT SEMUA →</a>
                 </div>
 				
 				<div class="grid md:grid-cols-3 gap-8">
@@ -100,8 +117,7 @@ function getImageUrl(record, filename) {
 
                             <div class="p-5 flex flex-col flex-1">
                                 <div class="text-[11px] text-gray-400 font-medium mb-2 flex items-center gap-2">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    {new Date(post.created).toLocaleDateString('id-ID', { dateStyle: 'long' })}
+                                    <span>📅 {new Date(post.created).toLocaleDateString('id-ID', { dateStyle: 'long' })}</span>
                                 </div>
 								
 								<h2 class="font-serif text-lg font-bold leading-snug text-gray-900 mb-3 group-hover:text-green-700 transition-colors">
