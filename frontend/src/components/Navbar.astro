@@ -1,9 +1,8 @@
 ---
 // src/components/Navbar.astro
-// Di sini area script (kosong dulu karena navbar masih statis)
 ---
 
-<nav class="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm">
+<nav id="navbar" class="sticky top-0 z-50 w-full transition-all duration-500 border-b border-transparent">
   <div class="max-w-6xl mx-auto px-6 h-16 flex justify-between items-center">
     
     <a href="/" class="flex items-center gap-2 group">
@@ -12,19 +11,62 @@
     </a>
 
     <div class="hidden md:flex items-center space-x-1">
-      <a href="/" class="px-4 py-2 text-xs font-bold text-white bg-green-700 rounded-full hover:bg-green-800 transition-colors tracking-widest uppercase">
+      
+      <a href="/" class="px-4 py-2 text-xs font-bold text-white bg-green-700 rounded-full hover:bg-green-800 transition-colors tracking-widest uppercase shadow-sm">
         Home
       </a>
+      
+      <div class="h-4 w-[1px] bg-gray-400/50 mx-2"></div>
 
-      <div class="h-4 w-[1px] bg-gray-300 mx-2"></div>
+      <div class="flex space-x-6 text-xs font-bold tracking-widest text-gray-600 uppercase">
+        
+        <a href="/kategori/isu konservasi" 
+           class="hover:text-green-700 transition-all hover:underline hover:decoration-2 hover:underline-offset-8 decoration-green-700">
+           Konservasi
+        </a>
 
-      <div class="flex space-x-6 text-xs font-bold tracking-widest text-gray-500 uppercase">
-        <a href="#" class="hover:text-green-700 hover:underline decoration-2 underline-offset-4 transition-all">Konservasi</a>
-        <a href="#" class="hover:text-red-700 hover:underline decoration-2 underline-offset-4 transition-all">Bencana</a>
-        <a href="#" class="hover:text-blue-700 hover:underline decoration-2 underline-offset-4 transition-all">Ekspedisi</a>
+        <a href="/kategori/bencana alam" 
+           class="hover:text-red-700 transition-all hover:underline hover:decoration-2 hover:underline-offset-8 decoration-red-700">
+           Bencana
+        </a>
+
+        <a href="/kategori/ekspedisi" 
+           class="hover:text-blue-700 transition-all hover:underline hover:decoration-2 hover:underline-offset-8 decoration-blue-700">
+           Ekspedisi
+        </a>
+
+        <a href="#tentang" 
+           class="text-gray-400 hover:text-gray-900 transition-all hover:underline hover:decoration-2 hover:underline-offset-8 decoration-gray-500 ml-4">
+           Tentang
+        </a>
+
       </div>
     </div>
 
     <button class="md:hidden text-gray-700 text-2xl">☰</button>
   </div>
 </nav>
+
+<script>
+  const navbar = document.getElementById('navbar');
+
+  function updateNavbar() {
+    // Definisi style scroll (Kaca Es / Frosted Glass)
+    // bg-white/40 supaya blur-nya kelihatan (kalau /5 terlalu tipis/bening)
+    const scrollClasses = ['bg-white/40', 'backdrop-blur-3xl', 'shadow-md', 'border-white/20'];
+    const topClasses = ['bg-transparent', 'border-transparent'];
+
+    if (window.scrollY > 10) {
+        // SAAT DI-SCROLL
+        navbar.classList.add(...scrollClasses);
+        navbar.classList.remove(...topClasses);
+    } else {
+        // SAAT DI ATAS
+        navbar.classList.add(...topClasses);
+        navbar.classList.remove(...scrollClasses);
+    }
+  }
+
+  window.addEventListener('scroll', updateNavbar);
+  updateNavbar();
+</script>

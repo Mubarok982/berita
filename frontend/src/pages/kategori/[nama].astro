@@ -1,0 +1,107 @@
+---
+// src/pages/kategori/[nama].astro
+import { pb } from '../../lib/pocketbase';
+import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro'; // <--- 1. Import Footer
+import About from '../../components/About.astro';   // <--- 2. Import About
+import '../../styles/global.css';
+
+// 1. GENERATE HALAMAN OTOMATIS
+export async function getStaticPaths() {
+    const allPosts = await pb.collection('berita_mapala').getFullList({
+        sort: '-created',
+    });
+
+    const categories = [...new Set(allPosts.map((post) => post.kategori))];
+
+    return categories.map((kategori) => {
+        const filteredPosts = allPosts.filter((post) => post.kategori === kategori);
+        
+        return {
+            params: { nama: kategori },
+            props: { posts: filteredPosts, categoryName: kategori },
+        };
+    });
+}
+
+const { posts, categoryName } = Astro.props;
+
+function getImageUrl(record, filename) {
+    if (!filename) return null;
+    return `${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${filename}`;
+}
+---
+
+<html lang="id">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Berita {categoryName} - MAPALA</title>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap" rel="stylesheet">
+	</head>
+	<body class="bg-gray-50 text-gray-800 font-sans antialiased">
+		
+		<Navbar />
+
+		<main class="max-w-6xl mx-auto px-6 py-12 min-h-screen">
+            <div class="mb-10 text-center">
+                <span class="text-xs font-bold tracking-widest text-gray-500 uppercase">ARSIP BERITA</span>
+                <h1 class="text-3xl md:text-5xl font-bold text-gray-900 mt-2 uppercase text-green-700">
+                    {categoryName}
+                </h1>
+                <div class="w-20 h-1 bg-green-700 mx-auto mt-6 rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+				{posts.map((post) => (
+					<article class="group flex flex-col bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+						<a href={`/berita/${post.id}`} class="relative aspect-[3/2] overflow-hidden bg-gray-100">
+							{post.foto_utama && (
+								<img 
+									src={getImageUrl(post, post.foto_utama)} 
+									alt={post.judul}
+									class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+								/>
+							)}
+                            <div class="absolute top-3 left-3 bg-white/90 backdrop-blur px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-gray-800 shadow-sm">
+                                {post.kategori}
+                            </div>
+						</a>
+
+                        <div class="p-5 flex flex-col flex-1">
+                            <div class="text-[11px] text-gray-400 font-medium mb-2 flex items-center gap-2">
+                                <span>📅 {new Date(post.created).toLocaleDateString('id-ID', { dateStyle: 'long' })}</span>
+                            </div>
+							
+							<h2 class="font-serif text-lg font-bold leading-snug text-gray-900 mb-3 group-hover:text-green-700 transition-colors">
+								<a href={`/berita/${post.id}`}>{post.judul}</a>
+							</h2>
+							
+							<p class="text-sm text-gray-500 leading-relaxed line-clamp-3 mb-4 flex-1">
+								{post.konten.replace(/<[^>]*>?/gm, '')}
+							</p>
+
+                            <a href={`/berita/${post.id}`} class="inline-flex items-center text-xs font-bold text-green-700 uppercase tracking-wide mt-auto group-hover:underline">
+                                Baca Selengkapnya
+                            </a>
+						</div>
+					</article>
+				))}
+			</div>
+
+            {posts.length === 0 && (
+                <div class="text-center py-20 text-gray-400">
+                    <p>Belum ada berita untuk kategori ini.</p>
+                </div>
+            )}
+		</main>
+
+        <About />
+        <Footer />
+
+        <style>
+            .font-serif { font-family: 'Merriweather', serif; }
+            .font-sans { font-family: 'Inter', sans-serif; }
+        </style>
+	</body>
+</html>

@@ -1,9 +1,8 @@
 ---
 import { pb } from '../../lib/pocketbase';
-import Navbar from '../../components/Navbar.astro'; // <-- Panggil Navbar
+import Navbar from '../../components/Navbar.astro';
 import '../../styles/global.css';
 
-// 1. Ambil ID untuk Static Paths
 export async function getStaticPaths() {
     const posts = await pb.collection('berita_mapala').getFullList();
     return posts.map((post) => ({
@@ -14,13 +13,16 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 
-// Helper URL Gambar
+// Helper URL Gambar (Bisa dipakai buat foto utama maupun galeri)
 function getImageUrl(record, filename) {
     if (!filename) return null;
     return `${pb.baseUrl}/api/files/${record.collectionId}/${record.id}/${filename}`;
 }
 
 const bgImage = getImageUrl(post, post.foto_utama);
+
+// Ambil array foto galeri (kalau kosong, dikasih array kosong biar gak error)
+const galeriFoto = post.galeri || []; 
 ---
 
 <html lang="id">
@@ -32,7 +34,7 @@ const bgImage = getImageUrl(post, post.foto_utama);
 	</head>
 	<body class="bg-white text-gray-900 font-serif antialiased">
 		
-        <Navbar />
+		<Navbar />
 
         <article>
             <header class="relative w-full h-[60vh] md:h-[70vh] flex items-end justify-center overflow-hidden bg-gray-900">
@@ -45,7 +47,6 @@ const bgImage = getImageUrl(post, post.foto_utama);
                 ) : (
                     <div class="absolute inset-0 bg-gray-800 flex items-center justify-center text-gray-600">No Image</div>
                 )}
-                
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
 
                 <div class="relative z-10 max-w-4xl mx-auto px-6 pb-12 text-center">
@@ -54,7 +55,6 @@ const bgImage = getImageUrl(post, post.foto_utama);
                         <span>•</span>
                         <span>{new Date(post.created).toLocaleDateString('id-ID', { dateStyle: 'long' })}</span>
                     </div>
-                    
                     <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-lg">
                         {post.judul}
                     </h1>
@@ -66,13 +66,32 @@ const bgImage = getImageUrl(post, post.foto_utama);
                     <div set:html={post.konten} />
                 </div>
 
-                <div class="mt-16 pt-10 border-t border-gray-200">
+                {galeriFoto.length > 0 && (
+                    <div class="mt-16 pt-10 border-t border-dashed border-gray-300">
+                        <h3 class="font-sans text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+                            📸 Dokumentasi Kegiatan
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            {galeriFoto.map((foto) => (
+                                <div class="relative group aspect-square overflow-hidden rounded-xl bg-gray-100 cursor-pointer">
+                                    <img 
+                                        src={getImageUrl(post, foto)} 
+                                        alt="Dokumentasi"
+                                        loading="lazy"
+                                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                    />
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300"></div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+                <div class="mt-10 pt-10 border-t border-gray-200">
                     <a href="/" class="inline-flex items-center gap-2 text-sm font-bold tracking-widest text-gray-500 hover:text-green-700 transition-colors uppercase">
                         ← Kembali ke Beranda
                     </a>
                 </div>
             </div>
-
         </article>
 
         <footer class="bg-gray-50 border-t border-gray-200 py-12 mt-12 text-center">
@@ -83,6 +102,5 @@ const bgImage = getImageUrl(post, post.foto_utama);
             .font-serif { font-family: 'Merriweather', serif; }
             .font-sans { font-family: 'Inter', sans-serif; }
         </style>
-
 	</body>
 </html>

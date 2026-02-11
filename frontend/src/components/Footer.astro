@@ -1,0 +1,42 @@
+---
+// src/components/Footer.astro
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-gray-900 text-gray-400 border-t-4 border-green-700 pt-16 pb-8">
+    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-12 mb-12">
+        
+        <div>
+            <div class="flex items-center gap-2 mb-4 text-white">
+                <div class="w-8 h-8 bg-green-700 rounded flex items-center justify-center font-bold text-lg">M</div>
+                <span class="font-bold text-lg">MAPALA<span class="text-green-700">NEWS</span></span>
+            </div>
+            <p class="text-sm leading-relaxed">
+                Menyuarakan kelestarian alam dan ketangguhan manusia dalam menghadapi bencana. Salam Lestari!
+            </p>
+        </div>
+
+        <div>
+            <h4 class="text-white font-bold uppercase tracking-widest mb-6 text-xs">Menu Navigasi</h4>
+            <ul class="space-y-3 text-sm">
+                <li><a href="/" class="hover:text-green-500 transition-colors">Beranda</a></li>
+                <li><a href="/kategori/isu konservasi" class="hover:text-green-500 transition-colors">Isu Konservasi</a></li>
+                <li><a href="/kategori/bencana alam" class="hover:text-green-500 transition-colors">Bencana Alam</a></li>
+                <li><a href="/kategori/ekspedisi" class="hover:text-green-500 transition-colors">Catatan Ekspedisi</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="text-white font-bold uppercase tracking-widest mb-6 text-xs">Hubungi Kami</h4>
+            <ul class="space-y-3 text-sm">
+                <li>📍 Sekretariat Mapala, Kampus A</li>
+                <li>📧 contact@mapala.org</li>
+                <li>📞 +62 812-3456-7890</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="text-center border-t border-gray-800 pt-8 text-xs font-bold tracking-widest uppercase">
+        &copy; {year} Mapala Indonesia. All Rights Reserved.
+    </div>
+</footer>
